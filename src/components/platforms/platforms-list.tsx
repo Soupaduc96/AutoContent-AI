@@ -75,9 +75,7 @@ export function PlatformsList({
   const handleConnect = async (platform: PlatformName) => {
     setLoadingStates((prev) => ({ ...prev, [platform]: true }));
     try {
-      onConnect?.(platform);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await onConnect?.(platform);
     } finally {
       setLoadingStates((prev) => ({ ...prev, [platform]: false }));
     }
@@ -86,9 +84,7 @@ export function PlatformsList({
   const handleDisconnect = async (platform: PlatformName, accountId: string) => {
     setLoadingStates((prev) => ({ ...prev, [platform]: true }));
     try {
-      onDisconnect?.(platform, accountId);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await onDisconnect?.(platform, accountId);
     } finally {
       setLoadingStates((prev) => ({ ...prev, [platform]: false }));
     }
