@@ -10,7 +10,7 @@ import type { Workspace, WorkspaceInsert, WorkspaceUpdate } from '@/types/databa
  * Get all workspaces for a user
  */
 export async function getUserWorkspaces(userId: string): Promise<Workspace[]> {
-  const supabase = createServerClient();
+  const supabase: any = createServerClient();
   
   const { data, error } = await supabase
     .from('workspaces')
@@ -30,7 +30,7 @@ export async function getUserWorkspaces(userId: string): Promise<Workspace[]> {
  * Get workspace by ID
  */
 export async function getWorkspaceById(workspaceId: string): Promise<Workspace | null> {
-  const supabase = createServerClient();
+  const supabase: any = createServerClient();
   
   const { data, error } = await supabase
     .from('workspaces')
@@ -50,7 +50,7 @@ export async function getWorkspaceById(workspaceId: string): Promise<Workspace |
  * Get workspace by slug
  */
 export async function getWorkspaceBySlug(slug: string, userId: string): Promise<Workspace | null> {
-  const supabase = createServerClient();
+  const supabase: any = createServerClient();
   
   const { data, error } = await supabase
     .from('workspaces')
@@ -71,7 +71,7 @@ export async function getWorkspaceBySlug(slug: string, userId: string): Promise<
  * Create workspace
  */
 export async function createWorkspace(workspace: WorkspaceInsert): Promise<Workspace | null> {
-  const supabase = createServerClient();
+  const supabase: any = createServerClient();
   
   const { data, error } = await supabase
     .from('workspaces')
@@ -91,7 +91,7 @@ export async function createWorkspace(workspace: WorkspaceInsert): Promise<Works
  * Update workspace
  */
 export async function updateWorkspace(workspaceId: string, updates: WorkspaceUpdate): Promise<Workspace | null> {
-  const supabase = createServerClient();
+  const supabase: any = createServerClient();
   
   const { data, error } = await supabase
     .from('workspaces')
@@ -112,7 +112,7 @@ export async function updateWorkspace(workspaceId: string, updates: WorkspaceUpd
  * Delete workspace
  */
 export async function deleteWorkspace(workspaceId: string): Promise<boolean> {
-  const supabase = createServerClient();
+  const supabase: any = createServerClient();
   
   const { error } = await supabase
     .from('workspaces')
