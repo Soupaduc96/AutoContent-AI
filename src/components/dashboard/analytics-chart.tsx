@@ -17,54 +17,40 @@ export function AnalyticsChart() {
         </div>
       </div>
 
-      <div className="flex h-[350px] items-end gap-4">
-        <div className="flex flex-1 flex-col items-center gap-3">
-          <div className="h-32 w-full rounded-t-2xl bg-blue-500" />
-          <span className="text-sm text-zinc-500">
-            Mon
-          </span>
+      <div className="flex h-[180px] items-end gap-3">
+        <div className="flex flex-1 flex-col items-center gap-2">
+          <div className="h-16 w-full rounded-t-xl bg-blue-500" />
+          <span className="text-xs text-zinc-500">Mon</span>
         </div>
 
-        <div className="flex flex-1 flex-col items-center gap-3">
-          <div className="h-44 w-full rounded-t-2xl bg-violet-500" />
-          <span className="text-sm text-zinc-500">
-            Tue
-          </span>
+        <div className="flex flex-1 flex-col items-center gap-2">
+          <div className="h-24 w-full rounded-t-xl bg-violet-500" />
+          <span className="text-xs text-zinc-500">Tue</span>
         </div>
 
-        <div className="flex flex-1 flex-col items-center gap-3">
-          <div className="h-56 w-full rounded-t-2xl bg-fuchsia-500" />
-          <span className="text-sm text-zinc-500">
-            Wed
-          </span>
+        <div className="flex flex-1 flex-col items-center gap-2">
+          <div className="h-32 w-full rounded-t-xl bg-fuchsia-500" />
+          <span className="text-xs text-zinc-500">Wed</span>
         </div>
 
-        <div className="flex flex-1 flex-col items-center gap-3">
-          <div className="h-40 w-full rounded-t-2xl bg-pink-500" />
-          <span className="text-sm text-zinc-500">
-            Thu
-          </span>
+        <div className="flex flex-1 flex-col items-center gap-2">
+          <div className="h-20 w-full rounded-t-xl bg-pink-500" />
+          <span className="text-xs text-zinc-500">Thu</span>
         </div>
 
-        <div className="flex flex-1 flex-col items-center gap-3">
-          <div className="h-64 w-full rounded-t-2xl bg-rose-500" />
-          <span className="text-sm text-zinc-500">
-            Fri
-          </span>
+        <div className="flex flex-1 flex-col items-center gap-2">
+          <div className="h-36 w-full rounded-t-xl bg-rose-500" />
+          <span className="text-xs text-zinc-500">Fri</span>
         </div>
 
-        <div className="flex flex-1 flex-col items-center gap-3">
-          <div className="h-48 w-full rounded-t-2xl bg-green-500" />
-          <span className="text-sm text-zinc-500">
-            Sat
-          </span>
+        <div className="flex flex-1 flex-col items-center gap-2">
+          <div className="h-28 w-full rounded-t-xl bg-green-500" />
+          <span className="text-xs text-zinc-500">Sat</span>
         </div>
 
-        <div className="flex flex-1 flex-col items-center gap-3">
-          <div className="h-72 w-full rounded-t-2xl bg-orange-500" />
-          <span className="text-sm text-zinc-500">
-            Sun
-          </span>
+        <div className="flex flex-1 flex-col items-center gap-2">
+          <div className="h-40 w-full rounded-t-xl bg-orange-500" />
+          <span className="text-xs text-zinc-500">Sun</span>
         </div>
       </div>
     </section>
