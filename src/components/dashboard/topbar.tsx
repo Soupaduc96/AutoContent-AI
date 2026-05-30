@@ -11,11 +11,11 @@ export function Topbar() {
       <div className="flex items-center justify-between px-8 py-6">
         <div>
           <h1 className="text-4xl font-bold text-white">
-            Dashboard
+            Overview
           </h1>
 
           <p className="mt-2 text-zinc-400">
-            Manage your AI content workflows
+            Track content performance and activity
           </p>
         </div>
 

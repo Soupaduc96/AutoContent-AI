@@ -1,33 +1,29 @@
 import {
-  Sidebar,
   Topbar,
   StatsCards,
   ContentTable,
-  GenerateModal,
   AnalyticsChart,
 } from "@/components/dashboard";
 
 export default function DashboardPage() {
   return (
-    <main className="relative flex min-h-screen overflow-hidden bg-black text-white">
-      <Sidebar />
+    <main className="relative min-h-screen overflow-hidden bg-black text-white">
+      <div className="absolute left-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-600/10 blur-[140px]" />
 
-      <div className="flex flex-1 flex-col">
+      <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-violet-600/10 blur-[140px]" />
+
+      <div className="relative z-10">
         <Topbar />
 
         <div className="space-y-8 p-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-6xl font-bold tracking-tight">
-                Welcome back 👋
-              </h1>
+          <div>
+            <h1 className="text-5xl font-bold tracking-tight">
+              Content Command Center
+            </h1>
 
-              <p className="mt-3 text-lg text-zinc-400">
-                Manage your AI content automation system.
-              </p>
-            </div>
-
-            <GenerateModal />
+            <p className="mt-3 text-lg text-zinc-400">
+              Everything you need in one place.
+            </p>
           </div>
 
           <StatsCards />

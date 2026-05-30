@@ -13,7 +13,7 @@ export function GenerateModal() {
         className="flex items-center gap-2 rounded-2xl bg-white px-6 py-3 text-black transition hover:opacity-90"
       >
         <Sparkles className="h-5 w-5" />
-        Generate Content
+        New Content
       </button>
 
       {open && (
