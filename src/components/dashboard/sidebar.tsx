@@ -15,8 +15,9 @@ import {
   Zap,
   CheckCircle2,
 } from "lucide-react";
-
 export function Sidebar() {
+  console.log("SIDEBAR LOADED");
+
   const pathname = usePathname();
 
   const getLinkClass = (href: string) =>

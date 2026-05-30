@@ -36,8 +36,8 @@ export default function PlatformsClient() {
   useEffect(() => {
     fetchAccounts();
   }, []);
-
-  const handleConnect = async (platform: PlatformName) => {
+const ha
+  ndleConnect = async (platform: PlatformName) => {
     setLoadingMap((m) => ({ ...m, [platform]: true }));
     try {
       const payload = {
@@ -67,7 +67,61 @@ export default function PlatformsClient() {
     }
   };
 
-  const handleDisconnect = async (platform: PlatformName, accountId: string) => {
+  const handleConnect = async (platform: PlatformName) => {
+  // LinkedIn OAuth
+  if (platform === 'linkedin') {
+    window.location.href = '/api/oauth/linkedin/start';
+    return;
+  }
+
+  setLoadingMap((m) => ({ ...m, [platform]: true }));
+
+  try {
+    const payload = {
+      platform,
+      accountName: `${platform} Demo Account`,
+      accessToken: 'demo-token',
+    };
+
+    const res = await fetch('/api/social-accounts/connect', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+
+      throw new Error(
+        err.error ||
+        res.statusText ||
+        'Failed to connect'
+      );
+    }
+
+    addToast(
+      'success',
+      `${platform} connected`
+    );
+
+    await fetchAccounts();
+  } catch (err) {
+    addToast(
+      'error',
+      err instanceof Error
+        ? err.message
+        : 'Connect failed'
+    );
+  } finally {
+    setLoadingMap((m) => ({
+      ...m,
+      [platform]: false,
+    }));
+  }
+};
     setLoadingMap((m) => ({ ...m, [platform]: true }));
     try {
       const res = await fetch('/api/social-accounts/disconnect', {
