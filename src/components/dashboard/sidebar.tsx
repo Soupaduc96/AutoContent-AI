@@ -11,6 +11,7 @@ import {
   Sparkles,
   Plug,
   PenSquare,
+  Calendar,
 } from "lucide-react";
 
 export function Sidebar() {
@@ -30,13 +31,13 @@ export function Sidebar() {
           </div>
 
           <div>
-           <h2 className="text-2xl font-bold leading-none text-white">
-  AutoContent AI
-</h2>
+            <h2 className="text-2xl font-bold leading-none text-white">
+              AutoContent AI
+            </h2>
 
-<p className="mt-1 text-sm text-zinc-500">
-  Social Media OS
-</p>
+            <p className="mt-1 text-sm text-zinc-500">
+              Social Media OS
+            </p>
           </div>
         </div>
 
@@ -63,6 +64,14 @@ export function Sidebar() {
           >
             <FileText size={20} />
             Drafts
+          </Link>
+
+          <Link
+            href="/dashboard/calendar"
+            className={getLinkClass("/dashboard/calendar")}
+          >
+            <Calendar size={20} />
+            Calendar
           </Link>
 
           <Link

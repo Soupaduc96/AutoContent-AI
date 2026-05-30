@@ -4,19 +4,24 @@ import { getUserByClerkId } from './users';
 export async function getCalendarEvents(
   clerkUserId: string
 ) {
-  const user = await getUserByClerkId(clerkUserId);
+  const user = await getUserByClerkId(
+    clerkUserId
+  );
 
   if (!user) {
     throw new Error('User not found');
   }
 
-  const { data, error } = await supabaseClient
-    .from('content_calendar')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('scheduled_for');
+  const { data, error } =
+    await supabaseClient
+      .from('content_calendar')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('scheduled_for');
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data;
 }
@@ -30,26 +35,32 @@ export async function createCalendarEvent(
     scheduledFor: string;
   }
 ) {
-  const user = await getUserByClerkId(clerkUserId);
+  const user = await getUserByClerkId(
+    clerkUserId
+  );
 
   if (!user) {
     throw new Error('User not found');
   }
 
-  const { data, error } = await supabaseClient
-    .from('content_calendar')
-    .insert({
-      user_id: user.id,
-      draft_id: payload.draftId,
-      title: payload.title,
-      platform: payload.platform,
-      scheduled_for: payload.scheduledFor,
-      status: 'scheduled',
-    })
-    .select()
-    .single();
+  const { data, error } =
+    await supabaseClient
+      .from('content_calendar')
+      .insert({
+        user_id: user.id,
+        draft_id: payload.draftId,
+        title: payload.title,
+        platform: payload.platform,
+        scheduled_for:
+          payload.scheduledFor,
+        status: 'scheduled',
+      })
+      .select()
+      .single();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data;
 }
