@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -46,15 +47,44 @@ export function Sidebar() {
       <div>
 
         {/* Logo */}
-        <div className="flex items-center gap-3 border-b border-white/10 p-5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 text-white">
-            <Sparkles size={18} />
-          </div>
-          <div>
-            <h2 className="text-base font-bold leading-none text-white">AutoContent AI</h2>
-            <p className="mt-1 text-xs text-zinc-500">Social Media OS</p>
-          </div>
-        </div>
+<Link
+  href="/dashboard"
+  className="
+    group
+    flex
+    items-center
+    gap-3
+    border-b
+    border-white/10
+    p-5
+    transition-all
+    duration-300
+    hover:bg-white/5
+  "
+>
+  <Image
+    src="/logo.png"
+    alt="AutoContent AI"
+    width={44}
+    height={44}
+    className="
+      rounded-xl
+      transition-all
+      duration-300
+      group-hover:scale-110
+    "
+  />
+
+  <div>
+    <h2 className="text-base font-bold leading-none text-white">
+      AutoContent AI
+    </h2>
+
+    <p className="mt-1 text-xs text-zinc-500">
+      AI Marketing Platform
+    </p>
+  </div>
+</Link>
 
         {/* Nav */}
         <nav className="px-3 pb-4">
@@ -93,15 +123,31 @@ export function Sidebar() {
           <SoonLink icon={<Zap size={16} />} label="Automations" />
           <SoonLink icon={<CheckCircle2 size={16} />} label="Approvals" />
 
-          <SectionLabel label="Account" />
-          <Link href="/billing" className={getLinkClass("/billing")}>
-            <CreditCard size={16} />
-            Billing
-          </Link>
-          <Link href="/settings" className={getLinkClass("/settings")}>
-            <Settings size={16} />
-            Settings
-          </Link>
+         <SectionLabel label="Account" />
+
+<Link
+  href="/dashboard/trash"
+  className={getLinkClass("/dashboard/trash")}
+>
+  <span className="text-base">🗑️</span>
+  Trash
+</Link>
+
+<Link
+  href="/billing"
+  className={getLinkClass("/billing")}
+>
+  <CreditCard size={16} />
+  Billing
+</Link>
+
+<Link
+  href="/settings"
+  className={getLinkClass("/settings")}
+>
+  <Settings size={16} />
+  Settings
+</Link>
 
         </nav>
       </div>

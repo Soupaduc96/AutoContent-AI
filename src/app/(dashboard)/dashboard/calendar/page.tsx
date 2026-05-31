@@ -93,52 +93,164 @@ export default function CalendarPage() {
   }
 
   return (
-    <div className="p-8 text-white">
-      <h1 className="text-4xl font-bold">
-        Content Calendar
-      </h1>
+    <div className="relative p-8 text-white">
 
-      <p className="mt-2 text-zinc-400">
-        Schedule content for publishing.
-      </p>
+      {/* Background Glow */}
+      <div className="absolute right-20 top-32 h-64 w-64 rounded-full bg-blue-600/5 blur-[120px]" />
 
-      {draftId && (
-        <div className="mt-6 rounded-2xl border border-blue-500/20 bg-blue-500/10 p-6">
-          <h3 className="mb-4 text-lg font-semibold">
-            Schedule Draft
+      <div className="absolute left-20 bottom-20 h-64 w-64 rounded-full bg-violet-600/5 blur-[120px]" />
+
+      {/* Header */}
+      <div className="relative z-10 mb-8">
+
+        <div className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-1 text-sm text-emerald-400">
+          Content Scheduling Active
+        </div>
+
+        <h1 className="mt-4 text-5xl font-bold tracking-tight text-white">
+          Content Calendar
+        </h1>
+
+        <p className="mt-3 text-lg text-zinc-400">
+          Plan, schedule and automate content publishing.
+        </p>
+
+      </div>
+
+      {/* Stats */}
+      <div className="relative z-10 mb-8 grid gap-6 md:grid-cols-3">
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <p className="text-zinc-400">
+            Scheduled Posts
+          </p>
+
+          <h3 className="mt-3 text-4xl font-bold text-white">
+            {events.length}
           </h3>
+        </div>
 
-          <input
-            type="datetime-local"
-            value={scheduleDate}
-            onChange={(e) =>
-              setScheduleDate(
-                e.target.value
-              )
-            }
-            className="rounded-lg border border-white/10 bg-zinc-900 px-4 py-2"
-          />
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <p className="text-zinc-400">
+            This Week
+          </p>
 
-          <button
-            onClick={scheduleDraft}
-            disabled={saving}
-            className="ml-4 rounded-lg bg-blue-600 px-4 py-2 text-white"
-          >
-            {saving
-              ? 'Scheduling...'
-              : 'Save Schedule'}
-          </button>
+          <h3 className="mt-3 text-4xl font-bold text-emerald-400">
+            12
+          </h3>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <p className="text-zinc-400">
+            Auto Published
+          </p>
+
+          <h3 className="mt-3 text-4xl font-bold text-blue-400">
+            27
+          </h3>
+        </div>
+
+      </div>
+
+      {/* Schedule Draft */}
+      {draftId && (
+        <div
+          className="
+            relative z-10 mb-8 overflow-hidden rounded-3xl
+            border border-white/10
+            bg-gradient-to-br
+            from-blue-950/40
+            via-black
+            to-violet-950/30
+            p-8
+          "
+        >
+          <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-blue-500/10 blur-3xl" />
+
+          <h2 className="text-2xl font-semibold text-white">
+            Schedule Draft
+          </h2>
+
+          <p className="mt-2 text-zinc-400">
+            Choose when this content should be published.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-4">
+
+            <input
+              type="datetime-local"
+              value={scheduleDate}
+              onChange={(e) =>
+                setScheduleDate(
+                  e.target.value
+                )
+              }
+              className="
+                rounded-xl
+                border border-white/10
+                bg-black/40
+                px-4 py-3
+                text-white
+                backdrop-blur-xl
+              "
+            />
+
+            <button
+              onClick={scheduleDraft}
+              disabled={saving}
+              className="
+                rounded-xl
+                bg-gradient-to-r
+                from-blue-600
+                to-violet-600
+                px-6 py-3
+                font-medium
+                text-white
+                transition-all duration-300
+                hover:scale-105
+                disabled:opacity-50
+              "
+            >
+              {saving
+                ? 'Scheduling...'
+                : 'Save Schedule'}
+            </button>
+
+          </div>
         </div>
       )}
 
-      <div className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-zinc-900">
+      {/* Table */}
+      <div
+        className="
+          relative z-10
+          overflow-hidden rounded-3xl
+          border border-white/10
+          bg-gradient-to-br
+          from-white/[0.04]
+          to-white/[0.02]
+          backdrop-blur-xl
+        "
+      >
         <table className="w-full">
+
           <thead>
             <tr className="border-b border-white/10 text-left text-zinc-400">
-              <th className="p-5">Title</th>
-              <th className="p-5">Platform</th>
-              <th className="p-5">Date</th>
-              <th className="p-5">Status</th>
+              <th className="p-5">
+                Title
+              </th>
+
+              <th className="p-5">
+                Platform
+              </th>
+
+              <th className="p-5">
+                Date
+              </th>
+
+              <th className="p-5">
+                Status
+              </th>
             </tr>
           </thead>
 
@@ -165,17 +277,32 @@ export default function CalendarPage() {
               events.map((event) => (
                 <tr
                   key={event.id}
-                  className="border-b border-white/5"
+                  className="
+                    border-b border-white/5
+                    transition-all duration-300
+                    hover:bg-white/[0.03]
+                  "
                 >
-                  <td className="p-5">
+                  <td className="p-5 text-white">
                     {event.title}
                   </td>
 
                   <td className="p-5">
-                    {event.platform}
+                    <span
+                      className="
+                        rounded-full
+                        border border-blue-500/20
+                        bg-blue-500/10
+                        px-3 py-1
+                        text-xs
+                        text-blue-400
+                      "
+                    >
+                      {event.platform}
+                    </span>
                   </td>
 
-                  <td className="p-5">
+                  <td className="p-5 text-zinc-300">
                     {new Date(
                       event.scheduled_for
                     ).toLocaleDateString(
@@ -200,14 +327,29 @@ export default function CalendarPage() {
                   </td>
 
                   <td className="p-5">
-                    {event.status}
+                    <span
+                      className="
+                        rounded-full
+                        border border-emerald-500/20
+                        bg-emerald-500/10
+                        px-3 py-1
+                        text-xs
+                        font-medium
+                        text-emerald-400
+                      "
+                    >
+                      {event.status}
+                    </span>
                   </td>
+
                 </tr>
               ))
             )}
           </tbody>
+
         </table>
       </div>
+
     </div>
   );
 }

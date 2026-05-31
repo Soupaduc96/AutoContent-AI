@@ -69,19 +69,80 @@ export default function DraftsPage() {
   }
 
   return (
-    <div className="p-8">
-      <div>
-        <h1 className="text-4xl font-bold text-white">
+    <div className="relative p-8 text-white">
+
+      {/* Background Glow */}
+      <div className="absolute right-20 top-20 h-72 w-72 rounded-full bg-blue-600/5 blur-[120px]" />
+
+      <div className="absolute left-20 bottom-20 h-72 w-72 rounded-full bg-violet-600/5 blur-[120px]" />
+
+      {/* Header */}
+      <div className="relative z-10 mb-8">
+
+        <div className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-1 text-sm text-blue-400">
+          Draft Management
+        </div>
+
+        <h1 className="mt-4 text-5xl font-bold tracking-tight text-white">
           Content Drafts
         </h1>
 
-        <p className="mt-2 text-zinc-400">
-          Manage your saved drafts.
+        <p className="mt-3 text-lg text-zinc-400">
+          Manage, edit and schedule your AI generated content.
         </p>
+
       </div>
 
-      <div className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-zinc-900">
+      {/* Stats */}
+      <div className="relative z-10 mb-8 grid gap-6 md:grid-cols-3">
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <p className="text-zinc-400">
+            Total Drafts
+          </p>
+
+          <h3 className="mt-3 text-4xl font-bold text-white">
+            {drafts.length}
+          </h3>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <p className="text-zinc-400">
+            Ready To Publish
+          </p>
+
+          <h3 className="mt-3 text-4xl font-bold text-emerald-400">
+            12
+          </h3>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <p className="text-zinc-400">
+            Scheduled
+          </p>
+
+          <h3 className="mt-3 text-4xl font-bold text-blue-400">
+            8
+          </h3>
+        </div>
+
+      </div>
+
+      {/* Draft Table */}
+      <div
+        className="
+          relative z-10
+          overflow-hidden
+          rounded-3xl
+          border border-white/10
+          bg-gradient-to-br
+          from-white/[0.04]
+          to-white/[0.02]
+          backdrop-blur-xl
+        "
+      >
         <table className="w-full">
+
           <thead>
             <tr className="border-b border-white/10 text-left text-zinc-400">
               <th className="p-5">Title</th>
@@ -115,9 +176,13 @@ export default function DraftsPage() {
               drafts.map((draft) => (
                 <tr
                   key={draft.id}
-                  className="border-b border-white/5"
+                  className="
+                    border-b border-white/5
+                    transition-all duration-300
+                    hover:bg-white/[0.03]
+                  "
                 >
-                  <td className="p-5 text-white">
+                  <td className="p-5 text-white font-medium">
                     {draft.title}
                   </td>
 
@@ -126,7 +191,17 @@ export default function DraftsPage() {
                   </td>
 
                   <td className="p-5">
-                    <span className="rounded-full bg-blue-500/10 px-3 py-1 text-xs text-blue-400">
+                    <span
+                      className="
+                        rounded-full
+                        border border-blue-500/20
+                        bg-blue-500/10
+                        px-3 py-1
+                        text-xs
+                        font-medium
+                        text-blue-400
+                      "
+                    >
                       {draft.status}
                     </span>
                   </td>
@@ -136,32 +211,64 @@ export default function DraftsPage() {
                       draft.created_at
                     ).toLocaleDateString()}
                   </td>
-<td className="p-5 flex gap-2">
-  <button
-    onClick={() => {
-      window.location.href =
-        `/dashboard/calendar?draftId=${draft.id}`;
-    }}
-    className="rounded-lg bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700"
-  >
-    Schedule
-  </button>
 
-  <button
-    onClick={() =>
-      deleteDraft(draft.id)
-    }
-    className="rounded-lg bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-700"
-  >
-    Delete
-  </button>
-</td>
+                  <td className="p-5">
+                    <div className="flex gap-3">
+
+                      <button
+                        onClick={() => {
+                          window.location.href =
+                            `/dashboard/calendar?draftId=${draft.id}`;
+                        }}
+                        className="
+                          rounded-xl
+                          bg-gradient-to-r
+                          from-blue-600
+                          to-violet-600
+                          px-4 py-2
+                          text-sm
+                          font-medium
+                          text-white
+                          transition-all
+                          duration-300
+                          hover:scale-105
+                        "
+                      >
+                        Schedule
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          deleteDraft(draft.id)
+                        }
+                        className="
+                          rounded-xl
+                          bg-gradient-to-r
+                          from-red-600
+                          to-rose-600
+                          px-4 py-2
+                          text-sm
+                          font-medium
+                          text-white
+                          transition-all
+                          duration-300
+                          hover:scale-105
+                        "
+                      >
+                        Delete
+                      </button>
+
+                    </div>
+                  </td>
+
                 </tr>
               ))
             )}
           </tbody>
+
         </table>
       </div>
+
     </div>
   );
 }
