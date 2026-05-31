@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-
+import { Suspense } from 'react';
 interface CalendarEvent {
   id: string;
   title: string;
@@ -11,7 +11,7 @@ interface CalendarEvent {
   scheduled_for: string;
 }
 
-export default function CalendarPage() {
+function CalendarContent() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -351,5 +351,19 @@ export default function CalendarPage() {
       </div>
 
     </div>
+  );
+}
+
+export default function CalendarPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-white">
+          Loading calendar...
+        </div>
+      }
+    >
+      <CalendarContent />
+    </Suspense>
   );
 }
