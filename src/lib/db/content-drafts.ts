@@ -15,6 +15,7 @@ export async function createDraft(
     await supabaseClient
       .from('content_drafts')
       .insert({
+        user_id: clerkUserId,
         title: data.title,
         business_type: data.businessType,
         platform: data.platform,

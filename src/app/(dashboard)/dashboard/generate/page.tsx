@@ -93,12 +93,12 @@ export default function GeneratePage() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white p-8">
+    <main className="min-h-screen bg-black text-white p-4 md:p-8">
 
       {/* 1. max-w-7xl pou plis espas */}
       <div className="mx-auto max-w-7xl">
 
-        <h1 className="mb-2 text-4xl font-bold">Generate AI Content</h1>
+        <h1 className="mb-2 text-2xl md:text-4xl font-bold">Generate AI Content</h1>
         <p className="mb-8 text-zinc-400">
           Create social media posts tailored to your business in seconds.
         </p>
@@ -236,7 +236,7 @@ export default function GeneratePage() {
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xl font-semibold">AI Preview</h2>
               {generatedContent && (
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button
                     onClick={handleCopy}
                     className={`rounded-lg px-3 py-1.5 text-sm transition ${
@@ -274,7 +274,7 @@ export default function GeneratePage() {
               </>
             ) : (
               /* 2. Empty state amelyore */
-              <div className="flex flex-1 min-h-[450px] items-center justify-center rounded-xl border border-dashed border-zinc-700">
+              <div className="flex flex-1 min-h-[250px] md:min-h-[450px] items-center justify-center rounded-xl border border-dashed border-zinc-700">
                 <div className="text-center px-6">
                   <div className="mb-4 text-5xl">✨</div>
                   <h3 className="mb-2 text-lg font-semibold text-white">AI Preview</h3>

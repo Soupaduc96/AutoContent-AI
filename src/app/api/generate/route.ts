@@ -1,6 +1,5 @@
 import OpenAI from "openai";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { createDraft } from "@/lib/db/content-drafts";
 
 const openai = new OpenAI({
@@ -8,17 +7,18 @@ const openai = new OpenAI({
 });
 
 export async function POST(request: NextRequest) {
+  console.log("===== GENERATE START =====");
+
   try {
     const body = await request.json();
 
-    const { userId } = await auth();
+    console.log("BODY:", body);
 
-    if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    // TEMPORARY DEMO MODE
+   const userId =
+  "b7f01ee9-2678-4c4c-bb76-91be2471fab8";
+
+    console.log("USING DEMO USER");
 
     console.log(
       "API KEY EXISTS:",
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     );
 
     const prompt = `
-You are an elite social media strategist and copywriter.
+You are a world-class social media strategist.
 
 Business Type: ${body.businessType}
 Platform: ${body.platform}
@@ -34,30 +34,33 @@ Tone: ${body.tone}
 Goal: ${body.goal}
 Topic: ${body.topic}
 
-Create a complete social media content package optimized specifically for ${body.platform}.
+Generate:
 
-Requirements:
+# Hook
+# Main Content
+# CTA
+# Hashtags
+# Engagement Question
+# Alternative Headline
 
-1. Attention-grabbing hook
-2. Main content
-3. Strong call-to-action
-4. Relevant hashtags
-5. Engagement question
-6. Alternative headline
-7. Platform-specific best practices
+Optimize specifically for ${body.platform}.
 
-Format the response cleanly using sections and headings.
-
-The content should feel professional, engaging, and ready to publish.
+Return ready-to-publish content.
 `;
 
+    console.log("CALLING OPENAI...");
+
     const response = await openai.responses.create({
-      model: "gpt-5",
+      model: "gpt-4.1-mini",
       input: prompt,
     });
 
+    console.log("OPENAI RESPONSE RECEIVED");
+
+    console.log("SAVING DRAFT...");
+
     await createDraft(userId, {
-      title: body.topic,
+      title: body.topic || "Untitled Draft",
       businessType: body.businessType,
       platform: body.platform,
       tone: body.tone,
@@ -65,13 +68,17 @@ The content should feel professional, engaging, and ready to publish.
       content: response.output_text,
     });
 
-    console.log("OPENAI SUCCESS");
+    console.log("DRAFT SAVED");
+    console.log("===== SUCCESS =====");
 
     return NextResponse.json({
       content: response.output_text,
     });
   } catch (error: any) {
-    console.error("OPENAI ERROR:", error);
+    console.error("===== OPENAI ERROR =====");
+    console.error(error);
+    console.error("MESSAGE:", error?.message);
+    console.error("========================");
 
     return NextResponse.json(
       {
