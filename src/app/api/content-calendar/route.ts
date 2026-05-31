@@ -1,4 +1,3 @@
-import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 import {
@@ -7,43 +6,53 @@ import {
 } from '@/lib/db/content-calendar';
 
 export async function GET() {
-  const { userId } = await auth();
+  try {
+    const userId = 'demo-user';
 
-  if (!userId) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
+    const events = await getCalendarEvents(
+      userId
     );
+
+    return NextResponse.json(
+      Array.isArray(events) ? events : []
+    );
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json([]);
   }
-
-  const events = await getCalendarEvents(userId);
-
-  return NextResponse.json(events);
 }
 
 export async function POST(
   request: NextRequest
 ) {
-  const { userId } = await auth();
+  try {
+    const userId = 'demo-user';
 
-  if (!userId) {
+    const body = await request.json();
+
+    const event =
+      await createCalendarEvent(
+        userId,
+        {
+          draftId: body.draftId,
+          title: body.title,
+          platform: body.platform,
+          scheduledFor:
+            body.scheduledFor,
+        }
+      );
+
+    return NextResponse.json(event);
+  } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
+      {
+        error:
+          'Failed to create calendar event',
+      },
+      { status: 500 }
     );
   }
-
-  const body = await request.json();
-
-  const event = await createCalendarEvent(
-    userId,
-    {
-      draftId: body.draftId,
-      title: body.title,
-      platform: body.platform,
-      scheduledFor: body.scheduledFor,
-    }
-  );
-
-  return NextResponse.json(event);
 }
