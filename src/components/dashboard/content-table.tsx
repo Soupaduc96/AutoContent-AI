@@ -10,8 +10,7 @@ interface Draft {
 }
 
 export function ContentTable() {
-  const [drafts, setDrafts] =
-    useState<Draft[]>([]);
+  const [drafts, setDrafts] = useState<Draft[]>([]);
 
   useEffect(() => {
     loadDrafts();
@@ -25,11 +24,18 @@ export function ContentTable() {
 
       const data = await response.json();
 
-      setDrafts(data);
+      setDrafts(
+        Array.isArray(data) ? data : []
+      );
     } catch (error) {
       console.error(error);
+      setDrafts([]);
     }
   }
+
+  const safeDrafts = Array.isArray(drafts)
+    ? drafts
+    : [];
 
   return (
     <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
@@ -44,14 +50,14 @@ export function ContentTable() {
       </div>
 
       <div className="space-y-5">
-        {drafts.length === 0 ? (
+        {safeDrafts.length === 0 ? (
           <div className="rounded-2xl bg-black/40 p-5">
             <p className="text-zinc-400">
               No content yet.
             </p>
           </div>
         ) : (
-          drafts.map((draft) => (
+          safeDrafts.map((draft) => (
             <div
               key={draft.id}
               className="rounded-2xl bg-black/40 p-5"

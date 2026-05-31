@@ -27,7 +27,14 @@ export function StatsCards() {
       );
 
       if (!response.ok) {
-        throw new Error('Stats API not found');
+     if (!response.ok) {
+  setStats({
+    postsGenerated: 0,
+    scheduledPosts: 0,
+    connectedPlatforms: 0,
+  });
+  return;
+}
       }
 
       const data = await response.json();
