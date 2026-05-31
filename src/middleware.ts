@@ -5,5 +5,5 @@ export function middleware() {
 }
 
 export const config = {
-  matcher: ["/((?!_next).*)"],
+  matcher: ["/:path*"],
 };
