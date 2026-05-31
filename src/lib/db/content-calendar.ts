@@ -1,58 +1,65 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { supabaseClient } from './index';
+import { getUserByClerkId } from './users';
 
-import {
-  getCalendarEvents,
-  createCalendarEvent,
-} from '@/lib/db/content-calendar';
+export async function getCalendarEvents(
+  clerkUserId: string
+) {
+  const user = await getUserByClerkId(
+    clerkUserId
+  );
 
-export async function GET() {
-  try {
-    const userId = 'demo-user';
-
-    const events = await getCalendarEvents(
-      userId
-    );
-
-    return NextResponse.json(
-      Array.isArray(events) ? events : []
-    );
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json([]);
+  if (!user) {
+    return [];
   }
+
+  const { data, error } =
+    await supabaseClient
+      .from('content_calendar')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('scheduled_for');
+
+  if (error) {
+    throw error;
+  }
+
+  return data || [];
 }
 
-export async function POST(
-  request: NextRequest
-) {
-  try {
-    const userId = 'demo-user';
-
-    const body = await request.json();
-
-    const event =
-      await createCalendarEvent(
-        userId,
-        {
-          draftId: body.draftId,
-          title: body.title,
-          platform: body.platform,
-          scheduledFor:
-            body.scheduledFor,
-        }
-      );
-
-    return NextResponse.json(event);
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      {
-        error:
-          'Failed to create calendar event',
-      },
-      { status: 500 }
-    );
+export async function createCalendarEvent(
+  clerkUserId: string,
+  payload: {
+    draftId?: string;
+    title: string;
+    platform: string;
+    scheduledFor: string;
   }
+) {
+  const user = await getUserByClerkId(
+    clerkUserId
+  );
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from('content_calendar')
+      .insert({
+        user_id: user.id,
+        draft_id: payload.draftId,
+        title: payload.title,
+        platform: payload.platform,
+        scheduled_for: payload.scheduledFor,
+        status: 'scheduled',
+      })
+      .select()
+      .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
