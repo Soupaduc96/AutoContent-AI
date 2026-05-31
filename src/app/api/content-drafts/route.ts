@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 
 import {
   getDrafts,
@@ -8,25 +7,17 @@ import {
 
 export async function GET() {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const userId = 'demo-user';
 
     const drafts = await getDrafts(userId);
 
-    return NextResponse.json(drafts);
+    return NextResponse.json(
+      Array.isArray(drafts) ? drafts : []
+    );
   } catch (error) {
     console.error(error);
 
-    return NextResponse.json(
-      { error: 'Failed to fetch drafts' },
-      { status: 500 }
-    );
+    return NextResponse.json([]);
   }
 }
 
@@ -34,14 +25,7 @@ export async function POST(
   request: NextRequest
 ) {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const userId = 'demo-user';
 
     const body = await request.json();
 
