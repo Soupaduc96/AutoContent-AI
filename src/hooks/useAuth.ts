@@ -1,20 +1,19 @@
 /**
- * useAuth Hook
- * 
- * Get current authenticated user from Clerk
+ * Temporary Auth Hook
+ * Clerk disabled for deployment testing
  */
 
 'use client';
 
-import { useUser } from '@clerk/nextjs';
-
 export function useAuth() {
-  const { user, isLoaded, isSignedIn } = useUser();
-
   return {
-    user,
-    isLoaded,
-    isSignedIn,
-    userId: user?.id,
+    user: {
+      id: 'demo-user',
+      firstName: 'Paul',
+      lastName: 'Souffrant',
+    },
+    isLoaded: true,
+    isSignedIn: true,
+    userId: 'demo-user',
   };
 }
