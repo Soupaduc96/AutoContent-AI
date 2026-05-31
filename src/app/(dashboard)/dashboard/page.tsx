@@ -6,8 +6,7 @@ import {
 
 export default function DashboardPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black text-white">
-
+    <main className="relative min-h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
       <div className="absolute left-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-600/10 blur-[140px]" />
 
       <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-violet-600/10 blur-[140px]" />
