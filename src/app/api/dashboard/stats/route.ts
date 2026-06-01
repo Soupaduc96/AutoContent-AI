@@ -10,7 +10,7 @@ export async function GET() {
 
     const drafts = await getDrafts(userId);
     const calendar = await getCalendarEvents(userId);
-    const platforms = await getSocialAccounts(userId);
+    const platforms = [];
 
     return NextResponse.json({
       postsGenerated: drafts?.length || 0,
