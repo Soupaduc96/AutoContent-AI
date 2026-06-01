@@ -1,99 +1,198 @@
 /**
- * GET /api/users/profile
- * Fetch current user profile
+ * Users Repository
+ * Database operations for users table
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getOrCreateUser, updateUser } from '@/lib/db/users';
+import { createServerClient } from '@/lib/supabase/client';
+import type { User, UserInsert, UserUpdate } from '@/types/database.types';
 
-const DEMO_USER_ID = 'b7f01ee9-2678-4c4c-bb76-91be2471fab8';
-const DEMO_USER_EMAIL = 'souffrantpaulducasse.spd@gmail.com';
-const DEMO_USER_CLERK_ID = 'user_3EN6Fu2JW15pmwOuIikifzNdcOu';
+/**
+ * Get user by Clerk ID
+ */
+export async function getUserByClerkId(clerkId: string): Promise<User | null> {
+  const supabase: any = createServerClient();
+  
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('clerk_id', clerkId)
+    .single();
 
-export async function GET(request: NextRequest) {
-  try {
-    console.log('Fetching demo user profile...');
-
-    const user = await getOrCreateUser(
-      DEMO_USER_ID,
-      DEMO_USER_EMAIL,
-      DEMO_USER_CLERK_ID
-    );
-
-    console.log('USER RESULT:', user);
-
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'getOrCreateUser returned null',
-        },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      user,
-    });
-  } catch (error) {
-    console.error('PROFILE API ERROR:', error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to fetch profile',
-      },
-      { status: 500 }
-    );
+  if (error) {
+    console.error('Error fetching user:', error);
+    return null;
   }
+
+  return data;
 }
 
-export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { firstName, lastName } = body;
+/**
+ * Get user by ID
+ */
+export async function getUserById(userId: string): Promise<User | null> {
+  const supabase: any = createServerClient();
+  
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', userId)
+    .single();
 
-    await getOrCreateUser(
-      DEMO_USER_ID,
-      DEMO_USER_EMAIL,
-      DEMO_USER_CLERK_ID
-    );
-
-    const user = await updateUser(DEMO_USER_ID, {
-      firstName,
-      lastName,
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Failed to update user',
-        },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      user,
-    });
-  } catch (error) {
-    console.error('UPDATE PROFILE ERROR:', error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to update profile',
-      },
-      { status: 500 }
-    );
+  if (error) {
+    console.error('Error fetching user:', error);
+    return null;
   }
+
+  return data;
+}
+
+/**
+ * Get or create user by Clerk ID and user ID
+ * If a user with the provided ID doesn't exist, create one with the given clerkId and email
+ */
+export async function getOrCreateUser(
+  userId: string,
+  email: string,
+  clerkId: string
+): Promise<User | null> {
+  const supabase: any = createServerClient();
+
+  // Try to find by ID first
+  const { data: existingById, error: errById } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', userId)
+    .single();
+
+  if (!errById && existingById) {
+    return existingById as User;
+  }
+
+  // Try to find by clerk_id
+  const { data: existingByClerk, error: errByClerk } = await supabase
+    .from('users')
+    .select('*')
+    .eq('clerk_id', clerkId)
+    .single();
+
+  if (!errByClerk && existingByClerk) {
+    return existingByClerk as User;
+  }
+
+  // Create new user with provided id
+  const { data: newUser, error: insertError } = await supabase
+    .from('users')
+    .insert({
+      id: userId,
+      clerk_id: clerkId,
+      email,
+      subscription_plan: 'free',
+    } as any)
+    .select()
+    .single();
+
+  if (insertError) {
+    console.error('Error creating user in getOrCreateUser:', insertError);
+    return null;
+  }
+
+  return newUser as User;
+}
+
+/**
+ * Create or update user
+ */
+export async function upsertUser(clerkId: string, userData: UserInsert): Promise<User | null> {
+  const supabase: any = createServerClient();
+  
+  const payload = { ...userData } as any;
+  delete payload.clerk_id;
+  payload.clerk_id = clerkId;
+
+  const { data, error } = await supabase
+    .from('users')
+    .upsert(payload, {
+      onConflict: 'clerk_id',
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error upserting user:', error);
+    return null;
+  }
+
+  return data;
+}
+
+/**
+ * Update user
+ */
+export async function updateUser(
+  userId: string,
+  updates: { firstName?: string; lastName?: string; profileImage?: string }
+): Promise<User | null> {
+  const supabase: any = createServerClient();
+
+  const payload: Partial<Record<string, any>> = {};
+  if (updates.firstName !== undefined) payload.first_name = updates.firstName;
+  if (updates.lastName !== undefined) payload.last_name = updates.lastName;
+  if (updates.profileImage !== undefined) payload.profile_image = updates.profileImage;
+
+  const { data, error } = await supabase
+    .from('users')
+    .update(payload as any)
+    .eq('id', userId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating user:', error);
+    return null;
+  }
+
+  return data as User;
+}
+
+/**
+ * Update user subscription plan
+ */
+export async function updateSubscriptionPlan(
+  userId: string,
+  plan: 'free' | 'starter' | 'professional' | 'enterprise'
+): Promise<User | null> {
+  const supabase: any = createServerClient();
+
+  const { data, error } = await supabase
+    .from('users')
+    .update({ subscription_plan: plan })
+    .eq('id', userId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating subscription plan:', error);
+    return null;
+  }
+
+  return data;
+}
+
+/**
+ * Delete user
+ */
+export async function deleteUser(userId: string): Promise<boolean> {
+  const supabase: any = createServerClient();
+  
+  const { error } = await supabase
+    .from('users')
+    .delete()
+    .eq('id', userId);
+
+  if (error) {
+    console.error('Error deleting user:', error);
+    return false;
+  }
+
+  return true;
 }
