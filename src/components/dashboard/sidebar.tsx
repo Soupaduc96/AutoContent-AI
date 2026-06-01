@@ -16,32 +16,131 @@ import {
   Zap,
   CheckCircle2,
 } from "lucide-react";
-export function Sidebar() {
-  
+const getLinkClass = (href: string, pathname: string) =>
+  pathname === href
+    ? "flex w-full items-center gap-3 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-black transition-all duration-300"
+    : "flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-zinc-400 transition-all duration-300 hover:translate-x-1 hover:bg-white/5 hover:text-white";
 
+const SectionLabel = ({ label }: { label: string }) => (
+  <p className="mb-1 mt-4 px-4 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
+    {label}
+  </p>
+);
+
+const SoonLink = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
+  <div className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-zinc-600 cursor-not-allowed">
+    {icon}
+    <span>{label}</span>
+    <span className="ml-auto rounded-full bg-zinc-800 px-2 py-0.5 text-[10px] text-zinc-500">
+      Soon
+    </span>
+  </div>
+);
+
+export function DashboardNav({
+  onLinkClick,
+}: {
+  onLinkClick?: () => void;
+}) {
   const pathname = usePathname();
 
-  const getLinkClass = (href: string) =>
-    pathname === href
-      ? "flex w-full items-center gap-3 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-black transition-all duration-300"
-      : "flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-zinc-400 transition-all duration-300 hover:translate-x-1 hover:bg-white/5 hover:text-white";
+  const handleLinkClick = () => {
+    onLinkClick?.();
+  };
 
-  const SectionLabel = ({ label }: { label: string }) => (
-    <p className="mb-1 mt-4 px-4 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-      {label}
-    </p>
+  return (
+    <nav className="px-3 pb-4">
+
+      <SectionLabel label="Main" />
+      <Link
+        href="/dashboard"
+        className={getLinkClass("/dashboard", pathname)}
+        onClick={handleLinkClick}
+      >
+        <LayoutDashboard size={16} />
+        Dashboard
+      </Link>
+
+      <SectionLabel label="Content" />
+      <Link
+        href="/dashboard/generate"
+        className={getLinkClass("/dashboard/generate", pathname)}
+        onClick={handleLinkClick}
+      >
+        <PenSquare size={16} />
+        Generate
+      </Link>
+      <Link
+        href="/dashboard/drafts"
+        className={getLinkClass("/dashboard/drafts", pathname)}
+        onClick={handleLinkClick}
+      >
+        <FileText size={16} />
+        Drafts
+      </Link>
+      <Link
+        href="/dashboard/calendar"
+        className={getLinkClass("/dashboard/calendar", pathname)}
+        onClick={handleLinkClick}
+      >
+        <Calendar size={16} />
+        Calendar
+      </Link>
+
+      <SectionLabel label="Social" />
+      <Link
+        href="/platforms"
+        className={getLinkClass("/platforms", pathname)}
+        onClick={handleLinkClick}
+      >
+        <Plug size={16} />
+        Platforms
+      </Link>
+      <Link
+        href="/dashboard/analytics"
+        className={getLinkClass("/dashboard/analytics", pathname)}
+        onClick={handleLinkClick}
+      >
+        <BarChart3 size={16} />
+        Analytics
+      </Link>
+
+      <SectionLabel label="AI" />
+      <SoonLink icon={<Zap size={16} />} label="Automations" />
+      <SoonLink icon={<CheckCircle2 size={16} />} label="Approvals" />
+
+      <SectionLabel label="Account" />
+      <Link
+        href="/dashboard/trash"
+        className={getLinkClass("/dashboard/trash", pathname)}
+        onClick={handleLinkClick}
+      >
+        <span className="text-base">🗑️</span>
+        Trash
+      </Link>
+
+      <Link
+        href="/billing"
+        className={getLinkClass("/billing", pathname)}
+        onClick={handleLinkClick}
+      >
+        <CreditCard size={16} />
+        Billing
+      </Link>
+
+      <Link
+        href="/settings"
+        className={getLinkClass("/settings", pathname)}
+        onClick={handleLinkClick}
+      >
+        <Settings size={16} />
+        Settings
+      </Link>
+    </nav>
   );
+}
 
-  const SoonLink = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
-    <div className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-zinc-600 cursor-not-allowed">
-      {icon}
-      <span>{label}</span>
-      <span className="ml-auto rounded-full bg-zinc-800 px-2 py-0.5 text-[10px] text-zinc-500">
-        Soon
-      </span>
-    </div>
-  );
-
+export function Sidebar() {
   return (
     <aside className="hidden w-[260px] flex-col justify-between border-r border-white/10 bg-black/60 backdrop-blur-xl lg:flex">
       <div>
@@ -87,69 +186,7 @@ export function Sidebar() {
 </Link>
 
         {/* Nav */}
-        <nav className="px-3 pb-4">
-
-          <SectionLabel label="Main" />
-          <Link href="/dashboard" className={getLinkClass("/dashboard")}>
-            <LayoutDashboard size={16} />
-            Dashboard
-          </Link>
-
-          <SectionLabel label="Content" />
-          <Link href="/dashboard/generate" className={getLinkClass("/dashboard/generate")}>
-            <PenSquare size={16} />
-            Generate
-          </Link>
-          <Link href="/dashboard/drafts" className={getLinkClass("/dashboard/drafts")}>
-            <FileText size={16} />
-            Drafts
-          </Link>
-          <Link href="/dashboard/calendar" className={getLinkClass("/dashboard/calendar")}>
-            <Calendar size={16} />
-            Calendar
-          </Link>
-
-          <SectionLabel label="Social" />
-          <Link href="/platforms" className={getLinkClass("/platforms")}>
-            <Plug size={16} />
-            Platforms
-          </Link>
-          <Link href="/dashboard/analytics" className={getLinkClass("/dashboard/analytics")}>
-            <BarChart3 size={16} />
-            Analytics
-          </Link>
-
-          <SectionLabel label="AI" />
-          <SoonLink icon={<Zap size={16} />} label="Automations" />
-          <SoonLink icon={<CheckCircle2 size={16} />} label="Approvals" />
-
-         <SectionLabel label="Account" />
-
-<Link
-  href="/dashboard/trash"
-  className={getLinkClass("/dashboard/trash")}
->
-  <span className="text-base">🗑️</span>
-  Trash
-</Link>
-
-<Link
-  href="/billing"
-  className={getLinkClass("/billing")}
->
-  <CreditCard size={16} />
-  Billing
-</Link>
-
-<Link
-  href="/settings"
-  className={getLinkClass("/settings")}
->
-  <Settings size={16} />
-  Settings
-</Link>
-
-        </nav>
+        <DashboardNav />
       </div>
 
       {/* 2. Upgrade Card amelyore */}

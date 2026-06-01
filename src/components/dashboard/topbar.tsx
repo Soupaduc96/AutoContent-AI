@@ -7,9 +7,11 @@ import {
   ArrowLeft,
   ArrowRight,
   Sparkles,
-  Menu
+  Menu,
+  X,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { DashboardNav } from '@/components/dashboard/sidebar';
 
 export function Topbar() {
   const router = useRouter();
@@ -19,6 +21,8 @@ export function Topbar() {
 
   const [showAccountMenu, setShowAccountMenu] =
     useState(false);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const notificationRef =
     useRef<HTMLDivElement>(null);
@@ -55,6 +59,7 @@ export function Topbar() {
       if (event.key === 'Escape') {
         setShowNotifications(false);
         setShowAccountMenu(false);
+        setDrawerOpen(false);
       }
     }
 
@@ -82,44 +87,46 @@ export function Topbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-black/50 backdrop-blur-xl">
-      <div className="flex items-center justify-between px-4 py-4 md:px-8 md:py-5">
+    <>
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-black/50 backdrop-blur-xl">
+        <div className="flex items-center justify-between px-4 py-4 md:px-8 md:py-5">
 
-        {/* LEFT */}
-<div className="flex items-center gap-4">
-
-  <button
-    className="flex md:hidden h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
-  >
-    <Menu className="h-5 w-5" />
-  </button>
-
-  <div className="hidden md:flex items-center gap-2">
+          {/* LEFT */}
+          <div className="flex items-center gap-4">
 
             <button
-              onClick={() => router.back()}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-zinc-300 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white"
+              onClick={() => setDrawerOpen(true)}
+              className="flex md:hidden h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <Menu className="h-5 w-5" />
             </button>
 
-            <button
-              onClick={() => router.forward()}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-zinc-300 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white"
-            >
-              <ArrowRight className="h-4 w-4" />
-            </button>
+            <div className="hidden md:flex items-center gap-2">
 
-          </div>
+              <button
+                onClick={() => router.back()}
+                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-zinc-300 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
 
-         <div>
-  <p className="text-xs text-zinc-500">
-    Workspace
-  </p>
+              <button
+                onClick={() => router.forward()}
+                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-zinc-300 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
 
-  <button
-    onClick={() => router.push('/dashboard')}
-    className="
+            </div>
+
+            <div>
+              <p className="text-xs text-zinc-500">
+                Workspace
+              </p>
+
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="
   text-lg
   md:text-2xl
   font-bold
@@ -127,21 +134,21 @@ export function Topbar() {
       transition-all
       duration-300
       hover:text-violet-400
-    "
-  >
-    Overview
-  </button>
-</div>
-        </div>
+                "
+              >
+                Overview
+              </button>
+            </div>
+          </div>
 
-        {/* RIGHT */}
-        <div className="flex items-center gap-3">
+          {/* RIGHT */}
+          <div className="flex items-center gap-3">
 
-          {/* Account */}
-          <div
-            ref={accountRef}
-            className="relative hidden lg:block"
-          >
+            {/* Account */}
+            <div
+              ref={accountRef}
+              className="relative hidden lg:block"
+            >
             <button
               onClick={() =>
                 setShowAccountMenu(
@@ -300,9 +307,7 @@ export function Topbar() {
           </div>
 
           {/* Theme Toggle */}
-          <div className="hidden md:block">
-  <ThemeToggle />
-</div>
+          <ThemeToggle />
 
           {/* Generate */}
           <button
@@ -321,5 +326,39 @@ export function Topbar() {
         </div>
       </div>
     </header>
+
+      {drawerOpen && (
+        <div
+          className="fixed inset-0 z-50 flex md:hidden"
+          onClick={() => setDrawerOpen(false)}
+        >
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+
+          <div
+            className="relative z-10 h-full w-[280px] overflow-y-auto border-r border-white/10 bg-zinc-950/95 px-4 py-6 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-zinc-500">Navigation</p>
+                <p className="text-lg font-semibold text-white">
+                  AutoContent AI
+                </p>
+              </div>
+
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
+                aria-label="Close navigation"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <DashboardNav onLinkClick={() => setDrawerOpen(false)} />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
